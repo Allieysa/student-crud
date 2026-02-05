@@ -1,0 +1,24 @@
+const StudentCourse = require('./studentCourseModel');
+
+module.exports.createCourseDBService = async (data) => {
+    try {
+        const course = new StudentCourse(data);
+        await course.save();
+        return true;
+    } catch (error) {
+        console.log("Error creating course:", error);
+        return false;
+    }
+};
+
+module.exports.getAllCoursesDBService = async () => {
+    return await StudentCourse.find();
+};
+
+module.exports.updateCourseDBService = async (id, data) => {
+    return await StudentCourse.findByIdAndUpdate(id, data, { new: true });
+};
+
+module.exports.deleteCourseDBService = async (id) => {
+    return await StudentCourse.findByIdAndDelete(id);
+};

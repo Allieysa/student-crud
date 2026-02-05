@@ -1,0 +1,17 @@
+const express = require('express');
+const router = express.Router();
+
+const studentController = require('../src/student/studentAuthController');
+const studentCourseController = require('../src/student/studentCourseController');
+
+// Student login & registration
+router.route('/student/login').post(studentController.loginUserControllerFn);
+router.route('/student/create').post(studentController.createStudentControllerFn);
+
+// Student course CRUD
+router.route('/student-course/register').post(studentCourseController.createCourseControllerFn);
+router.route('/student-course/all').get(studentCourseController.getAllCoursesControllerFn);
+router.route('/student-course/update/:id').put(studentCourseController.updateCourseControllerFn);
+router.route('/student-course/delete/:id').delete(studentCourseController.deleteCourseControllerFn);
+
+module.exports = router;

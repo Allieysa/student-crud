@@ -1,0 +1,49 @@
+var studentModel = require('./studentAuthModel');
+
+var key = '1234567890123456'; // 16 byte key
+var encryptor = require('simple-encryptor')(key);
+
+// REGISTER STUDENT
+module.exports.createStudentDBService = async (studentDetails) => {
+    try {
+        var studentModelData = new studentModel();
+
+        studentModelData.firstname = studentDetails.firstname;
+        studentModelData.lastname = studentDetails.lastname;
+        studentModelData.email = studentDetails.email;
+
+        var encrypted = encryptor.encrypt(studentDetails.password);
+        studentModelData.password = encrypted;
+
+        await studentModelData.save();
+        return true;
+
+    } catch (error) {
+        console.log("Error creating student:", error);
+        return false;
+    }
+};
+
+
+// LOGIN STUDENT
+module.exports.loginUserDBService = async (studentDetails) => {
+    try {
+        var result = await studentModel.findOne({ email: studentDetails.email });
+
+        if (!result) {
+            throw { status: false, msg: "User not found" };
+        }
+
+        var decrypted = encryptor.decrypt(result.password);
+
+        if (decrypted === studentDetails.password) {
+            return { status: true, msg: "Login successful" };
+        } else {
+            throw { status: false, msg: "Invalid password" };
+        }
+
+    } catch (error) {
+        console.log("Login error:", error);
+        throw error;
+    }
+};

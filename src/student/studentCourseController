@@ -1,0 +1,42 @@
+const studentCourseService = require('./studentCourseService');
+
+module.exports.createCourseControllerFn = async (req, res) => {
+    try {
+        const status = await studentCourseService.createCourseDBService(req.body);
+        if (status) res.send({ status: true, message: "Course registered successfully" });
+        else res.send({ status: false, message: "Failed to register course" });
+    } catch (error) {
+        console.log(error);
+        res.send({ status: false, message: error.message });
+    }
+};
+
+module.exports.getAllCoursesControllerFn = async (req, res) => {
+    try {
+        const courses = await studentCourseService.getAllCoursesDBService();
+        res.send(courses);
+    } catch (error) {
+        console.log(error);
+        res.send({ status: false, message: error.message });
+    }
+};
+
+module.exports.updateCourseControllerFn = async (req, res) => {
+    try {
+        const course = await studentCourseService.updateCourseDBService(req.params.id, req.body);
+        res.send({ status: true, message: "Course updated", course });
+    } catch (error) {
+        console.log(error);
+        res.send({ status: false, message: error.message });
+    }
+};
+
+module.exports.deleteCourseControllerFn = async (req, res) => {
+    try {
+        await studentCourseService.deleteCourseDBService(req.params.id);
+        res.send({ status: true, message: "Course deleted" });
+    } catch (error) {
+        console.log(error);
+        res.send({ status: false, message: error.message });
+    }
+};

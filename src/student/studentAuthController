@@ -1,0 +1,41 @@
+var studentService = require('./studentAuthService');
+
+var createStudentControllerFn = async (req, res) => {
+    try {
+        console.log(req.body);
+        var status = await studentService.createStudentDBService(req.body);
+        console.log(status);
+
+        if (status) {
+            res.send({ "status": true, message: "Student created successfully" });
+        } else {
+            res.send({ "status": false, message: "Failed to create student" });
+        }
+    } catch (error) {
+
+        console.log(error);
+    }
+
+};
+
+var loginUserControllerFn = async (req, res) => {
+    try {
+        console.log(req.body);
+        var status = await studentService.loginUserDBService(req.body);
+        console.log(status);
+
+        if (status) {
+            res.send({ "status": true, message: "Student validated succesfully" });
+        } else {
+            res.send({ "status": false, message: "Student validated failed" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.send({ "status": false, message: error.msg });
+    }
+
+};
+
+module.exports = {
+    createStudentControllerFn, loginUserControllerFn
+};
