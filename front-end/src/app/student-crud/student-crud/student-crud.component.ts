@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 interface StudentRegistration {
   _id?: string;
@@ -14,7 +15,7 @@ interface StudentRegistration {
 @Component({
   selector: 'app-student-crud',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './student-crud.component.html',
   styleUrls: ['./student-crud.component.scss']
 })
@@ -23,7 +24,7 @@ export class StudentCrudComponent implements OnInit {
   registrations: StudentRegistration[] = [];
   editingId: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.loadRegistrations();
@@ -70,4 +71,10 @@ export class StudentCrudComponent implements OnInit {
     this.student = { studentId: '', subject: '', semester: '', credits: 0 };
     this.editingId = null;
   }
+
+  logout() {
+  localStorage.clear(); // or removeItem("email") / removeItem("token")
+  this.router.navigateByUrl('/login');
+}
+
 }

@@ -40,7 +40,7 @@ export class RegisterComponent {
         next: (resultData: any) => {
         console.log(resultData);
         alert('Student Registered Successfully');
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login');
       },
         error: (err) => {
           console.error(err);
