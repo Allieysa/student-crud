@@ -11,9 +11,10 @@ module.exports.createCourseDBService = async (data) => {
     }
 };
 
-module.exports.getAllCoursesDBService = async () => {
-    return await StudentCourse.find();
+module.exports.getAllCoursesDBService = async (email) => {
+  return await StudentCourse.find({ email: email });
 };
+
 
 module.exports.updateCourseDBService = async (id, data) => {
     return await StudentCourse.findByIdAndUpdate(id, data, { new: true });

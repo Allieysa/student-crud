@@ -30,25 +30,31 @@ export class StudentCrudComponent implements OnInit {
   }
 
   loadRegistrations() {
-    this.http.get<StudentRegistration[]>('http://localhost:3000/student-course/all')
-      .subscribe(data => this.registrations = data);
-  }
+  const email = localStorage.getItem("email");
+
+  this.http.get<any[]>(`http://localhost:3000/student-course/all?email=${email}`)
+    .subscribe((data) => {
+      this.registrations = data;
+    });
+}
 
   saveRegistration() {
-    if (this.editingId) {
-      this.http.put(`http://localhost:3000/student-course/update/${this.editingId}`, this.student)
-        .subscribe(() => {
-          this.loadRegistrations();
-          this.resetForm();
-        });
-    } else {
-      this.http.post('http://localhost:3000/student-course/register', this.student)
-        .subscribe(() => {
-          this.loadRegistrations();
-          this.resetForm();
-        });
-    }
-  }
+  const email = localStorage.getItem("email");
+
+  const bodyData = {
+    email: email,
+    studentId: this.student.studentId,
+    subject: this.student.subject,
+    semester: this.student.semester,
+    credits: this.student.credits
+  };
+
+  this.http.post("http://localhost:3000/student-course/register", bodyData)
+    .subscribe(() => {
+      alert("Course registered successfully");
+      this.loadRegistrations();
+    });
+}
 
   editRegistration(reg: StudentRegistration) {
     this.student = { ...reg };

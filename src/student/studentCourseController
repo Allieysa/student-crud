@@ -12,13 +12,15 @@ module.exports.createCourseControllerFn = async (req, res) => {
 };
 
 module.exports.getAllCoursesControllerFn = async (req, res) => {
-    try {
-        const courses = await studentCourseService.getAllCoursesDBService();
-        res.send(courses);
-    } catch (error) {
-        console.log(error);
-        res.send({ status: false, message: error.message });
-    }
+  try {
+    const email = req.query.email;
+
+    const courses = await studentCourseService.getAllCoursesDBService(email);
+    res.send(courses);
+  } catch (error) {
+    console.log(error);
+    res.send({ status: false, message: error.message });
+  }
 };
 
 module.exports.updateCourseControllerFn = async (req, res) => {

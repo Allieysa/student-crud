@@ -27,17 +27,22 @@ export class LoginComponent {
     const bodyData = { email: this.email, password: this.password };
 
     this.http.post('http://localhost:3000/student/login', bodyData)
-      .subscribe({
-        next: (resultData: any) => {
-        console.log(resultData);
-        alert('Student Login Successfully');
+  .subscribe({
+    next: (resultData: any) => {
+      console.log(resultData);
+
+      if (resultData.status === true) {
+        localStorage.setItem("email", this.email);
         this.router.navigateByUrl('/student-crud');
-      },
-        error: (err) => {
-          console.error(err);
-          this.errorMessage = 'Login failed. Please try again.';
-        }
-      });
+      } else {
+        alert("Login failed: " + resultData.message);
+      }
+    },
+    error: (err) => {
+      console.log(err);
+      alert("Something went wrong!");
+    }
+  });
   }
     save(form: NgForm) {
     this.login(form);
